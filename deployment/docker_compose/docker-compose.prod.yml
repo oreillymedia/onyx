@@ -254,7 +254,8 @@ services:
 
   # follows https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
   certbot:
-    image: certbot/certbot
+    image: "${CERTBOT_IMAGE:-certbot/certbot}" # Allows overriding the image for specific certbot variants (e.g., certbot/dns-google)
+    network_mode: ${CERTBOT_NETWORK_MODE:-bridge} # Allows setting the network mode, defaulting to bridge (e.g., 'host' to allow gcp instances to access the compute metadata server for auth)
     restart: unless-stopped
     volumes:
       - ../data/certbot/conf:/etc/letsencrypt
