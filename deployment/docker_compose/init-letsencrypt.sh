@@ -102,8 +102,12 @@ esac
 # Enable staging mode if needed
 if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
+# Allows configuration of certbot auth method. Set default to webroot if not specified
+certbot_auth_args=${CERTBOT_AUTH_ARGS:-"--webroot -w /var/www/certbot"}
+
 $COMPOSE_CMD -f docker-compose.prod.yml run --name onyx-stack --rm --entrypoint "\
-  certbot certonly --webroot -w /var/www/certbot \
+  certbot certonly \
+    $certbot_auth_args \
     $staging_arg \
     $email_arg \
     $domain_args \
